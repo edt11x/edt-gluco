@@ -40,7 +40,14 @@ else
 fi
 
 echo "Building gluco ${VERSION} for ${ARCH}"
-cargo build --release --locked
+if grep -q '^\[\[package\]\]' Cargo.lock 2>/dev/null && cargo fetch --locked; then
+    cargo build --release --locked
+else
+    echo "Cargo.lock in this checkout cannot be used. Cargo will write a new one."
+    rm -f Cargo.lock
+    cargo build --release
+fi
+bash packaging/icons/write-icons.sh
 
 STAGE="$(mktemp -d)"
 cleanup() { rm -rf "$STAGE"; }

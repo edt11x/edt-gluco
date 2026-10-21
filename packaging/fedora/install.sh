@@ -125,12 +125,13 @@ fi
 # Inter is the face the window asks for. The package name varies by release.
 sudo dnf install -y rsms-inter-fonts || sudo dnf install -y inter-fonts || true
 
-# The copy published from the text upload can contain only the Cargo.lock
-# header. --locked then refuses to run. A real lock file lists packages.
-if grep -q '^\[\[package\]\]' Cargo.lock 2>/dev/null; then
+# The copy on GitHub may be a header only, or it may list packages whose
+# checksums do not match the crates. --locked refuses both. A fetch that
+# succeeds means this lock file is safe to build with.
+if grep -q '^\[\[package\]\]' Cargo.lock 2>/dev/null && cargo fetch --locked; then
     cargo build --release --locked
 else
-    echo "Cargo.lock in this checkout is incomplete. Cargo will write a new one."
+    echo "Cargo.lock in this checkout cannot be used. Cargo will write a new one."
     rm -f Cargo.lock
     cargo build --release
 fi
