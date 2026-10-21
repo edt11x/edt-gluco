@@ -1,0 +1,15 @@
+Package: gluco
+Version: @VERSION@
+Section: science
+Priority: optional
+Architecture: @ARCH@
+Maintainer: Gluco contributors <gluco@localhost>
+Depends: @DEPENDS@
+Recommends: fonts-inter
+Description: Desktop window for LibreLinkUp glucose
+ Gluco keeps a LibreLinkUp glucose reading on the desktop: the current
+ value, trend, recent history, and how long the sensor has left.
+ .
+ Gluco is not made by Abbott and it is not a medical device. Readings
+ can be delayed or missing. Dose and treat from the FreeStyle Libre app
+ or reader.

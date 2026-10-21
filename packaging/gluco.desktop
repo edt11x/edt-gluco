@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Gluco
+GenericName=Glucose
+Comment=LibreLinkUp glucose on the desktop
+Exec=gluco
+Icon=gluco
+Terminal=false
+Categories=Science;
+Keywords=glucose;diabetes;libre;cgm;
+StartupNotify=true
+StartupWMClass=gluco

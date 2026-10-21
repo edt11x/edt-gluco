@@ -1,0 +1,7 @@
+Gluco reads a LibreLinkUp account. It is not an Abbott product and it is
+not a medical device. Dose and treat from the FreeStyle Libre app or reader.
+
+Sign in from the window. "Remember on this computer" stores the account
+under ~/.config/gluco/session.json, readable only by that user.
+
+If the window opens blank, start it with SLINT_RENDERER=software.
