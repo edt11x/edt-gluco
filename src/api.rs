@@ -835,8 +835,8 @@ fn lockout_seconds(value: &Value) -> Option<i64> {
 
 fn is_version_gate(status: u16, body: &str) -> bool {
     body.contains("minimumVersion")
-        || body.contains(\"status\":920")
-        || body.contains(\"status\": 920")
+        || body.contains("\"status\":920")
+        || body.contains("\"status\": 920")
         || (status == 403 && body.contains("4.16"))
 }
 
@@ -868,7 +868,7 @@ fn public_message(body: &str, status: u16) -> String {
 fn brief_err(text: &str) -> String {
     let text = text.split_whitespace().collect::<Vec<_>>().join(" ");
     if text.len() > 120 {
-        format!("{}\u2026", &text[..120])
+        format!("{}…", &text[..120])
     } else {
         text
     }
