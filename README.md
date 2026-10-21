@@ -11,21 +11,21 @@ Gluco is not made by Abbott. It is not a medical device. Readings from LibreLink
 Build a `.deb` on the machine that will run it (or any machine of the same architecture), then install that package:
 
 ```bash
-packaging/build-deb.sh
+bash packaging/build-deb.sh
 sudo apt install ./dist/gluco_*_*.deb
 ```
 
 The package puts `gluco` on `PATH`, adds a menu entry, and depends on the shared libraries the window needs. `fonts-inter` is recommended so the window uses the face it was drawn with.
 
-`dist/gluco_*_amd64.deb` is a prebuilt package for x86-64. It needs glibc 2.39 or newer, which means Ubuntu 24.04 and Debian 13. On an older release, run `packaging/build-deb.sh` there and install the package that command writes.
+`dist/gluco_*_amd64.deb` is a prebuilt package for x86-64. It needs glibc 2.39 or newer, which means Ubuntu 24.04 and Debian 13. On an older release, run `bash packaging/build-deb.sh` there and install the package that command writes.
 
 ### Fedora
 
 ```bash
-packaging/fedora/install.sh
+bash packaging/fedora/install.sh
 ```
 
-The script installs the compiler and GUI libraries with `dnf`, builds the release binary, and installs it under `/usr/local`. It asks for `sudo` only for those system changes. Remove it later with `packaging/fedora/install.sh --uninstall`.
+The script installs the compiler and GUI libraries with `dnf`, builds the release binary, and installs it under `/usr/local`. It asks for `sudo` only for those system changes. Remove it later with `bash packaging/fedora/install.sh --uninstall`. A checkout from GitHub does not keep the executable bit on these scripts, so run them with `bash`.
 
 ## Run from source
 
