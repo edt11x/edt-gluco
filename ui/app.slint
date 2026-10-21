@@ -541,7 +541,7 @@ export component MainWindow inherits Window {
                 }
 
                 ActionButton {
-                    label: root.busy ? "Signing in\u2026" : "Sign in";
+                    label: root.busy ? "Signing in…" : "Sign in";
                     enabled: !root.busy;
                     clicked => {
                         root.sign-in(email-edit.text, password-edit.text, region-box.current-index, root.remember-checked);
@@ -646,7 +646,7 @@ export component MainWindow inherits Window {
                     padding: 8px;
                     padding-left: 12px;
                     Text {
-                        text: "Sample data \u2014 not your glucose";
+                        text: "Sample data — not your glucose";
                         color: #f3d78a;
                         font-size: 13px;
                         font-weight: 600;
@@ -899,7 +899,7 @@ export component MainWindow inherits Window {
                             color: #f5f7fb;
                         }
                         Text {
-                            text: root.count-text + " \u00b7 " + root.unit-text;
+                            text: root.count-text + " · " + root.unit-text;
                             color: #8e97ab;
                             font-size: 13px;
                         }
@@ -1005,7 +1005,7 @@ export component MainWindow inherits Window {
                             font-size: 13px;
                         }
                         ThresholdRow { label: "Low"; value: root.low-threshold; swatch: #de3d4c; }
-                        ThresholdRow { label: "In range"; value: root.low-threshold + " \u2013 " + root.high-threshold; swatch: #1e8c42; }
+                        ThresholdRow { label: "In range"; value: root.low-threshold + " – " + root.high-threshold; swatch: #1e8c42; }
                         ThresholdRow { label: "High"; value: root.high-threshold; swatch: #e0a322; }
                         ThresholdRow { label: "Very low"; value: root.very-low-threshold; swatch: #b42338; }
                         ThresholdRow { label: "Very high line"; value: root.urgent-threshold; swatch: #e0a322; }
@@ -1125,7 +1125,7 @@ export component MainWindow inherits Window {
                         }
 
                         ActionButton {
-                            label: root.busy ? "Syncing\u2026" : "Refresh now";
+                            label: root.busy ? "Syncing…" : "Refresh now";
                             enabled: !root.busy;
                             clicked => { root.refresh(); }
                         }
