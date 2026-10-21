@@ -125,7 +125,16 @@ fi
 # Inter is the face the window asks for. The package name varies by release.
 sudo dnf install -y rsms-inter-fonts || sudo dnf install -y inter-fonts || true
 
-cargo build --release --locked
+# The copy published from the text upload can contain only the Cargo.lock
+# header. --locked then refuses to run. A real lock file lists packages.
+if grep -q '^\[\[package\]\]' Cargo.lock 2>/dev/null; then
+    cargo build --release --locked
+else
+    echo "Cargo.lock in this checkout is incomplete. Cargo will write a new one."
+    rm -f Cargo.lock
+    cargo build --release
+fi
+bash packaging/icons/write-icons.sh
 sudo install -D -m 0755 target/release/gluco "$BIN_PATH"
 sudo install -D -m 0644 packaging/gluco.desktop "$DESKTOP_PATH"
 for size in 48 64 128 256; do
