@@ -1,0 +1,1201 @@
+import { LineEdit, CheckBox, ComboBox } from "std-widgets.slint";
+
+export struct TickLabel {
+    text: string,
+    pos: float,
+}
+
+component DropMark inherits Rectangle {
+    width: 30px;
+    height: 30px;
+    Path {
+        width: 100%;
+        height: 100%;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 30;
+        viewbox-height: 30;
+        fill: #f5c518;
+        commands: "M 15 2 C 15 2 4.5 13 4.5 19 C 4.5 24.2 9 27.2 15 27.2 C 21 27.2 25.5 24.2 25.5 19 C 25.5 13 15 2 15 2 Z";
+    }
+    Rectangle {
+        width: parent.width * 0.2;
+        height: parent.height * 0.27;
+        x: parent.width * 0.3;
+        y: parent.height * 0.5;
+        border-radius: parent.width * 0.1;
+        background: #fff6cc;
+        opacity: 0.9;
+    }
+}
+
+component TrendArrow inherits Rectangle {
+    in property <int> direction;
+    width: 44px;
+    height: 44px;
+    property <angle> rotation: direction == 1 ? 90deg : direction == 2 ? 45deg : direction == 4 ? -45deg : direction == 5 ? -90deg : 0deg;
+    visible: direction >= 1 && direction <= 5;
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        transform-rotation: root.rotation;
+        Path {
+            width: 34px;
+            height: 16px;
+            x: (parent.width - self.width) / 2;
+            y: (parent.height - self.height) / 2;
+            stroke: #ffffff;
+            stroke-width: 3.4px;
+            stroke-line-cap: round;
+            stroke-line-join: round;
+            viewbox-x: 0;
+            viewbox-y: 0;
+            viewbox-width: 34;
+            viewbox-height: 16;
+            commands: "M 1 8 L 24 8 M 16 2 L 32 8 L 16 14";
+        }
+    }
+}
+
+component SignalIcon inherits Rectangle {
+    in property <color> tint;
+    width: 26px;
+    height: 26px;
+    Path {
+        width: 100%;
+        height: 100%;
+        stroke: root.tint;
+        stroke-width: 1.8px;
+        stroke-line-cap: round;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 26;
+        viewbox-height: 26;
+        commands: "M 9 16.8 C 9.2 12.4 16.8 12.4 17 16.8 M 6 15.4 C 6.3 9.2 19.7 9.2 20 15.4 M 3.2 13.8 C 3.6 6.0 22.4 6.0 22.8 13.8";
+    }
+    Rectangle {
+        width: 4.5px;
+        height: 4.5px;
+        border-radius: 2.5px;
+        background: root.tint;
+        x: 10.75px;
+        y: 16px;
+    }
+}
+
+component PlusIcon inherits Rectangle {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border-width: 1.5px;
+    border-color: #d7dbe6;
+    Path {
+        width: 100%;
+        height: 100%;
+        stroke: #f4f6fb;
+        stroke-width: 1.8px;
+        stroke-line-cap: round;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 32;
+        viewbox-height: 32;
+        commands: "M 16 9 L 16 23 M 9 16 L 23 16";
+    }
+}
+
+component NavIcon inherits Rectangle {
+    in property <int> kind;
+    in property <color> tint;
+    width: 24px;
+    height: 24px;
+
+    if kind == 0: Path {
+        width: 100%;
+        height: 100%;
+        fill: root.tint;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        commands: "M 12 3.2 L 21 11 L 21 20.5 L 14.2 20.5 L 14.2 14.2 L 9.8 14.2 L 9.8 20.5 L 3 20.5 L 3 11 Z";
+    }
+    if kind == 1: Path {
+        width: 100%;
+        height: 100%;
+        fill: root.tint;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        commands: "M 3.5 20 L 3.5 12 L 8 12 L 8 20 Z M 9.8 20 L 9.8 5 L 14.2 5 L 14.2 20 Z M 16 20 L 16 9 L 20.5 9 L 20.5 20 Z";
+    }
+    if kind == 2: Path {
+        width: 100%;
+        height: 100%;
+        fill: root.tint;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        commands: "M 12 2.8 C 8.6 2.8 6.4 6.2 6.4 10.2 L 4.2 16.2 L 19.8 16.2 L 17.6 10.2 C 17.6 6.2 15.4 2.8 12 2.8 Z M 9.4 17.6 C 9.7 19.6 14.3 19.6 14.6 17.6 Z";
+    }
+    if kind == 3: Path {
+        width: 100%;
+        height: 100%;
+        fill: root.tint;
+        viewbox-x: 0;
+        viewbox-y: 0;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        commands: "M 12 3.4 A 3.5 3.5 0 1 1 11.99 3.4 Z M 5.2 20.6 C 5.6 15.8 8.2 13.4 12 13.4 C 15.8 13.4 18.4 15.8 18.8 20.6 Z";
+    }
+}
+
+component NavButton inherits Rectangle {
+    in property <string> label;
+    in property <int> icon;
+    in property <bool> selected;
+    callback clicked();
+    horizontal-stretch: 1;
+    VerticalLayout {
+        width: 100%;
+        height: 100%;
+        alignment: center;
+        spacing: 3px;
+        HorizontalLayout {
+            alignment: center;
+            NavIcon {
+                kind: root.icon;
+                tint: root.selected ? #ffffff : #7e8798;
+            }
+        }
+        Text {
+            width: 100%;
+            text: root.label;
+            color: root.selected ? #ffffff : #7e8798;
+            font-size: 11px;
+            font-weight: root.selected ? 600 : 500;
+            horizontal-alignment: center;
+            overflow: elide;
+        }
+    }
+    TouchArea {
+        mouse-cursor: pointer;
+        clicked => { root.clicked(); }
+    }
+}
+
+component RangePicker inherits Rectangle {
+    in property <int> index;
+    callback changed(int);
+    height: 34px;
+    width: 96px;
+    border-radius: 10px;
+    background: #2a3142;
+    property <string> label: index == 0 ? "3 hrs" : index == 1 ? "6 hrs" : index == 3 ? "24 hrs" : "12 hrs";
+
+    HorizontalLayout {
+        padding-left: 12px;
+        padding-right: 10px;
+        spacing: 6px;
+        alignment: center;
+        Text {
+            text: root.label;
+            color: #e7ebf3;
+            font-size: 13px;
+            vertical-alignment: center;
+        }
+        Text {
+            text: "▾";
+            color: #c5cad6;
+            font-size: 11px;
+            vertical-alignment: center;
+        }
+    }
+
+    popup := PopupWindow {
+        x: 0px;
+        y: root.height + 6px;
+        close-policy: PopupClosePolicy.close-on-click-outside;
+        Rectangle {
+            width: 124px;
+            background: #2a3142;
+            border-radius: 12px;
+            border-width: 1px;
+            border-color: #3d465c;
+            VerticalLayout {
+                padding: 6px;
+                spacing: 2px;
+                for label[i] in ["3 hrs", "6 hrs", "12 hrs", "24 hrs"]: Rectangle {
+                    height: 34px;
+                    border-radius: 8px;
+                    background: i == root.index ? #1e8c42 : #00000000;
+                    Text {
+                        text: label;
+                        x: 12px;
+                        vertical-alignment: center;
+                        color: #ffffff;
+                        font-size: 13px;
+                    }
+                    TouchArea {
+                        mouse-cursor: pointer;
+                        clicked => {
+                            root.changed(i);
+                            popup.close();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    TouchArea {
+        mouse-cursor: pointer;
+        clicked => { popup.show(); }
+    }
+}
+
+component ActionButton inherits Rectangle {
+    in property <string> label;
+    in property <bool> enabled: true;
+    in property <color> fill: #1e8c42;
+    in property <color> ink: #ffffff;
+    callback clicked();
+    height: 48px;
+    border-radius: 14px;
+    background: root.enabled ? root.fill : #244232;
+    Text {
+        width: 100%;
+        height: 100%;
+        text: root.label;
+        color: root.ink;
+        font-size: 16px;
+        font-weight: 600;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+    TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: pointer;
+        clicked => {
+            if root.enabled {
+                root.clicked();
+            }
+        }
+    }
+}
+
+component StatTile inherits Rectangle {
+    in property <string> label;
+    in property <string> value;
+    horizontal-stretch: 1;
+    height: 78px;
+    border-radius: 14px;
+    background: #1b202b;
+    border-width: 1px;
+    border-color: #2c3344;
+    VerticalLayout {
+        alignment: center;
+        padding-left: 12px;
+        spacing: 2px;
+        Text {
+            text: root.label;
+            font-size: 12px;
+            color: #8e97ab;
+        }
+        Text {
+            text: root.value;
+            font-size: 22px;
+            font-weight: 700;
+            color: #f5f7fb;
+        }
+    }
+}
+
+component ThresholdRow inherits Rectangle {
+    in property <string> label;
+    in property <string> value;
+    in property <color> swatch;
+    height: 56px;
+    border-radius: 14px;
+    background: #1b202b;
+    border-width: 1px;
+    border-color: #2c3344;
+    HorizontalLayout {
+        padding-left: 14px;
+        padding-right: 16px;
+        spacing: 12px;
+        alignment: center;
+        Rectangle {
+            width: 8px;
+            height: 26px;
+            border-radius: 4px;
+            background: root.swatch;
+        }
+        Text {
+            text: root.label;
+            horizontal-stretch: 1;
+            color: #f5f7fb;
+            font-size: 15px;
+        }
+        Text {
+            text: root.value;
+            color: #d5dbe8;
+            font-weight: 600;
+            font-size: 15px;
+        }
+    }
+}
+
+export component MainWindow inherits Window {
+    title: "Gluco";
+    preferred-width: 440px;
+    preferred-height: 860px;
+    min-width: 390px;
+    min-height: 680px;
+    background: #10141c;
+    default-font-family: "Inter";
+    default-font-size: 16px;
+    default-font-weight: 500;
+    always-on-top: pinned;
+
+    in-out property <bool> signed-in: false;
+    in-out property <bool> busy: false;
+    in-out property <bool> preview: false;
+    in-out property <bool> pinned: false;
+    in-out property <bool> notify-on: true;
+    in-out property <bool> remember-checked: true;
+    in-out property <int> tab: 0;
+    in-out property <int> region-index: 0;
+    in-out property <int> range-index: 2;
+    in-out property <int> patient-index: 0;
+    in-out property <int> patient-count: 0;
+    in-out property <int> status-kind: 1;
+    in-out property <int> sensor-level: 0;
+    in-out property <int> trend: 3;
+    in-out property <int> link-state: 0;
+    in-out property <int> wear-days: 15;
+    in-out property <string> email-text;
+    in-out property <string> password-text;
+    in-out property <string> login-error;
+    in-out property <string> banner;
+    in-out property <string> device-name: "Glucose";
+    in-out property <string> patient-name;
+    in-out property <string> glucose-text: "--";
+    in-out property <string> unit-text: "mg/dL";
+    in-out property <string> status-text: "No current reading";
+    in-out property <string> as-of;
+    in-out property <string> sensor-text: "Sensor time unavailable";
+    in-out property <string> host-label;
+    in-out property <string> config-path;
+    in-out property <string> sync-text: "Not synced yet";
+    in-out property <string> low-threshold;
+    in-out property <string> high-threshold;
+    in-out property <string> very-low-threshold;
+    in-out property <string> urgent-threshold;
+    in-out property <string> line-in;
+    in-out property <string> line-low;
+    in-out property <string> line-high;
+    in-out property <string> dash-path;
+    in-out property <float> band-top: 0.4;
+    in-out property <float> band-height: 0.3;
+    in-out property <float> dot-x: 1;
+    in-out property <float> dot-y: 0.8;
+    in-out property <bool> dot-visible: false;
+    in-out property <bool> chart-empty: false;
+    in-out property <[string]> region-choices;
+    in-out property <[string]> patient-names;
+    in-out property <[TickLabel]> y-labels;
+    in-out property <[TickLabel]> x-labels;
+    in-out property <string> avg-text: "--";
+    in-out property <string> min-text: "--";
+    in-out property <string> max-text: "--";
+    in-out property <string> in-text: "--";
+    in-out property <string> low-caption: "Low";
+    in-out property <string> high-caption: "High";
+    in-out property <string> count-text;
+    in-out property <string> coverage-text;
+    in-out property <float> low-pct: 0;
+    in-out property <float> in-pct: 0;
+    in-out property <float> high-pct: 0;
+
+    callback sign-in(string, string, int, bool);
+    callback sign-out();
+    callback refresh();
+    callback preview-sample();
+    callback range-changed(int);
+    callback patient-changed(int);
+    callback wear-changed(int);
+    callback notify-changed(bool);
+    callback pin-changed(bool);
+    callback chart-resized(length, length);
+
+    property <color> status-bg: status-kind == 2 ? #d4922a : status-kind == 3 ? #d46a22 : status-kind == 4 ? #de3d4c : status-kind == 5 ? #b42338 : status-kind == 0 ? #2c3446 : #1e8c42;
+    property <color> status-accent: status-kind == 2 ? #f0c14a : status-kind == 3 ? #f09a4a : status-kind == 4 ? #ffb0b8 : status-kind == 5 ? #ffb0b8 : status-kind == 0 ? #465069 : #3dce73;
+    property <color> dot-color: status-kind == 4 || status-kind == 5 ? #ff5d72 : status-kind == 2 || status-kind == 3 ? #ffc14a : #3ddc84;
+    property <color> signal-color: busy ? #8e97ab : link-state == 2 ? #ff5a6a : link-state == 1 ? #e6a322 : #3dce73;
+    property <color> sensor-mark: sensor-level == 2 ? #de3d4c : sensor-level == 1 ? #e6a322 : #3dce73;
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #10141c;
+
+        if !root.signed-in: Flickable {
+            width: parent.width;
+            height: parent.height;
+            content-height: login.preferred-height;
+
+            login := VerticalLayout {
+                width: parent.width;
+                padding: 28px;
+                padding-top: 36px;
+                spacing: 14px;
+                alignment: start;
+
+                DropMark {
+                    width: 42px;
+                    height: 42px;
+                }
+                Text {
+                    text: "Gluco";
+                    font-size: 36px;
+                    font-weight: 700;
+                    color: #f5f7fb;
+                }
+                Text {
+                    text: "LibreLinkUp glucose, on this computer.";
+                    wrap: word-wrap;
+                    font-size: 16px;
+                    color: #b7c0d0;
+                }
+
+                Rectangle { height: 8px; }
+
+                Text {
+                    text: "Email";
+                    font-size: 13px;
+                    color: #8e97ab;
+                }
+                Rectangle {
+                    height: 48px;
+                    border-radius: 12px;
+                    background: #1b2130;
+                    border-width: 1px;
+                    border-color: #31384a;
+                    email-edit := LineEdit {
+                        width: 100%;
+                        height: 100%;
+                        text <=> root.email-text;
+                        placeholder-text: "name@email.com";
+                        font-size: 16px;
+                        accepted => { password-edit.focus(); }
+                    }
+                }
+
+                Text {
+                    text: "Password";
+                    font-size: 13px;
+                    color: #8e97ab;
+                }
+                Rectangle {
+                    height: 48px;
+                    border-radius: 12px;
+                    background: #1b2130;
+                    border-width: 1px;
+                    border-color: #31384a;
+                    password-edit := LineEdit {
+                        width: 100%;
+                        height: 100%;
+                        text <=> root.password-text;
+                        input-type: password;
+                        placeholder-text: "LibreLinkUp password";
+                        font-size: 16px;
+                        accepted => {
+                            root.sign-in(email-edit.text, self.text, region-box.current-index, root.remember-checked);
+                        }
+                    }
+                }
+
+                Text {
+                    text: "Region";
+                    font-size: 13px;
+                    color: #8e97ab;
+                }
+                region-box := ComboBox {
+                    model: root.region-choices;
+                    current-index: root.region-index;
+                }
+
+                remember-box := CheckBox {
+                    text: "Remember on this computer";
+                    checked <=> root.remember-checked;
+                }
+                Text {
+                    text: "The password stays in your config folder, readable only by your user. Leave this off to type it each time.";
+                    width: 100%;
+                    wrap: word-wrap;
+                    font-size: 12px;
+                    color: #8e97ab;
+                }
+
+                ActionButton {
+                    label: root.busy ? "Signing in\u2026" : "Sign in";
+                    enabled: !root.busy;
+                    clicked => {
+                        root.sign-in(email-edit.text, password-edit.text, region-box.current-index, root.remember-checked);
+                    }
+                }
+
+                if root.login-error != "": Text {
+                    text: root.login-error;
+                    wrap: word-wrap;
+                    color: #ffb4c0;
+                    font-size: 13px;
+                }
+
+                TouchArea {
+                    height: 36px;
+                    mouse-cursor: pointer;
+                    clicked => { root.preview-sample(); }
+                    Text {
+                        width: 100%;
+                        height: 100%;
+                        text: "Preview with sample data";
+                        color: #9fd7b4;
+                        font-size: 14px;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                    }
+                }
+
+                Rectangle { height: 8px; }
+                Text {
+                    text: "Gluco reads the LibreLinkUp account you sign in with. It is not made by Abbott and it is not a medical device. Readings can be delayed or missing. Dose and treat from the FreeStyle Libre app or reader, not from this window.";
+                    width: 100%;
+                    wrap: word-wrap;
+                    font-size: 12px;
+                    color: #7f889a;
+                }
+            }
+        }
+
+        if root.signed-in: VerticalLayout {
+            width: parent.width;
+            height: parent.height;
+            padding: 14px;
+            padding-top: 8px;
+            padding-bottom: 4px;
+            spacing: 10px;
+
+            HorizontalLayout {
+                height: 52px;
+                spacing: 10px;
+                alignment: center;
+                DropMark {}
+                VerticalLayout {
+                    horizontal-stretch: 1;
+                    alignment: center;
+                    spacing: 0px;
+                    Text {
+                        text: root.device-name;
+                        font-size: 22px;
+                        font-weight: 700;
+                        color: #f7f8fb;
+                        overflow: elide;
+                    }
+                    if root.patient-name != "": Text {
+                        text: root.patient-name;
+                        font-size: 13px;
+                        color: #8e97ab;
+                        overflow: elide;
+                    }
+                }
+                Rectangle {
+                    width: 40px;
+                    height: 40px;
+                    SignalIcon {
+                        tint: root.signal-color;
+                        x: (parent.width - self.width) / 2;
+                        y: (parent.height - self.height) / 2;
+                    }
+                    TouchArea {
+                        mouse-cursor: pointer;
+                        clicked => { root.refresh(); }
+                    }
+                }
+                Rectangle {
+                    width: 40px;
+                    height: 40px;
+                    PlusIcon {
+                        x: (parent.width - self.width) / 2;
+                        y: (parent.height - self.height) / 2;
+                    }
+                    TouchArea {
+                        mouse-cursor: pointer;
+                        clicked => { root.tab = 3; }
+                    }
+                }
+            }
+
+            if root.preview: Rectangle {
+                border-radius: 10px;
+                background: #3a3114;
+                VerticalLayout {
+                    padding: 8px;
+                    padding-left: 12px;
+                    Text {
+                        text: "Sample data \u2014 not your glucose";
+                        color: #f3d78a;
+                        font-size: 13px;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            if root.banner != "": Rectangle {
+                border-radius: 12px;
+                background: #3a2430;
+                VerticalLayout {
+                    padding: 10px;
+                    padding-left: 12px;
+                    Text {
+                        text: root.banner;
+                        wrap: word-wrap;
+                        color: #ffd0d8;
+                        font-size: 13px;
+                    }
+                }
+            }
+
+            Rectangle {
+                vertical-stretch: 1;
+
+                if root.tab == 0: VerticalLayout {
+                    width: 100%;
+                    height: 100%;
+                    spacing: 12px;
+
+                    Rectangle {
+                        vertical-stretch: 1;
+                        background: #1b202b;
+                        border-radius: 22px;
+                        border-width: 1px;
+                        border-color: #2c3344;
+
+                        VerticalLayout {
+                            width: 100%;
+                            height: 100%;
+                            spacing: 0px;
+
+                            status-card := Rectangle {
+                                height: 176px;
+                                background: root.status-bg;
+                                border-top-left-radius: 22px;
+                                border-top-right-radius: 22px;
+                                Rectangle {
+                                    x: 0px;
+                                    y: 0px;
+                                    width: 8px;
+                                    height: 100%;
+                                    background: root.status-accent;
+                                    border-top-left-radius: 22px;
+                                }
+                                Text {
+                                    x: 22px;
+                                    y: 14px;
+                                    text: root.status-text;
+                                    font-size: 18px;
+                                    font-weight: 600;
+                                    color: #ffffff;
+                                    horizontal-alignment: left;
+                                }
+                                glucose-label := Text {
+                                    x: 18px;
+                                    y: 40px;
+                                    text: root.glucose-text;
+                                    font-size: 78px;
+                                    font-weight: 700;
+                                    color: #ffffff;
+                                    horizontal-alignment: left;
+                                    accessible-label: root.glucose-text + " " + root.unit-text + ". " + root.status-text;
+                                }
+                                TrendArrow {
+                                    x: glucose-label.x + glucose-label.width + 8px;
+                                    y: glucose-label.y + (glucose-label.height - self.height) / 2;
+                                    direction: root.trend;
+                                }
+                                Text {
+                                    x: 22px;
+                                    y: glucose-label.y + glucose-label.height - 2px;
+                                    text: root.unit-text;
+                                    font-size: 15px;
+                                    color: #f3f7f4;
+                                }
+                                Text {
+                                    x: status-card.width - self.width - 16px;
+                                    y: glucose-label.y + glucose-label.height + 2px;
+                                    text: root.as-of;
+                                    font-size: 12px;
+                                    color: #e7f3ea;
+                                    horizontal-alignment: right;
+                                }
+                            }
+
+                            chart-host := Rectangle {
+                                vertical-stretch: 1;
+                                min-height: 220px;
+
+                                Text {
+                                    x: 2px;
+                                    y: 8px;
+                                    text: root.unit-text;
+                                    font-size: 12px;
+                                    color: #8e97ab;
+                                }
+                                RangePicker {
+                                    x: parent.width - self.width - 8px;
+                                    y: 6px;
+                                    index: root.range-index;
+                                    changed(i) => { root.range-changed(i); }
+                                }
+
+                                plot := Rectangle {
+                                    x: 42px;
+                                    y: 40px;
+                                    width: parent.width - 50px;
+                                    height: parent.height - 66px;
+                                    changed width => { root.chart-resized(self.width, self.height); }
+                                    changed height => { root.chart-resized(self.width, self.height); }
+
+                                    Rectangle {
+                                        x: 0px;
+                                        y: self.y-from-top;
+                                        width: 100%;
+                                        height: parent.height * root.band-height;
+                                        background: #173528;
+                                        property <length> y-from-top: parent.height * root.band-top;
+                                    }
+                                    Path {
+                                        width: 100%;
+                                        height: 100%;
+                                        fit: ImageFit.preserve;
+                                        stroke: #e0a322;
+                                        stroke-width: 1.6px;
+                                        commands: root.dash-path;
+                                    }
+                                    Path {
+                                        width: 100%;
+                                        height: 100%;
+                                        fit: ImageFit.preserve;
+                                        stroke: #ff4d6a;
+                                        stroke-width: 2.6px;
+                                        stroke-line-cap: round;
+                                        stroke-line-join: round;
+                                        commands: root.line-low;
+                                    }
+                                    Path {
+                                        width: 100%;
+                                        height: 100%;
+                                        fit: ImageFit.preserve;
+                                        stroke: #ffb020;
+                                        stroke-width: 2.6px;
+                                        stroke-line-cap: round;
+                                        stroke-line-join: round;
+                                        commands: root.line-high;
+                                    }
+                                    Path {
+                                        width: 100%;
+                                        height: 100%;
+                                        fit: ImageFit.preserve;
+                                        stroke: #f7f8fb;
+                                        stroke-width: 2.6px;
+                                        stroke-line-cap: round;
+                                        stroke-line-join: round;
+                                        commands: root.line-in;
+                                    }
+                                    if root.dot-visible: Rectangle {
+                                        width: 14px;
+                                        height: 14px;
+                                        border-radius: 7px;
+                                        background: root.dot-color;
+                                        border-width: 2px;
+                                        border-color: #f4fff8;
+                                        x: parent.width * root.dot-x - self.width / 2;
+                                        y: parent.height * root.dot-y - self.height / 2;
+                                    }
+                                    if root.chart-empty: Text {
+                                        text: "No readings in this window";
+                                        width: 100%;
+                                        y: parent.height / 2 - self.height / 2;
+                                        horizontal-alignment: center;
+                                        color: #8e97ab;
+                                        font-size: 13px;
+                                    }
+                                }
+
+                                for tick in root.y-labels: Text {
+                                    x: 0px;
+                                    y: plot.y + plot.height * tick.pos - self.height / 2;
+                                    width: 36px;
+                                    text: tick.text;
+                                    font-size: 11px;
+                                    color: #8b93a7;
+                                    horizontal-alignment: right;
+                                }
+                                for tick in root.x-labels: Text {
+                                    x: plot.x + plot.width * tick.pos - self.width / 2;
+                                    y: plot.y + plot.height + 4px;
+                                    text: tick.text;
+                                    font-size: 11px;
+                                    color: #8b93a7;
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        height: 58px;
+                        border-radius: 16px;
+                        background: #1b202b;
+                        border-width: 1px;
+                        border-color: #2c3344;
+                        HorizontalLayout {
+                            padding-left: 16px;
+                            padding-right: 16px;
+                            spacing: 12px;
+                            alignment: center;
+                            Rectangle {
+                                width: 8px;
+                                height: 26px;
+                                border-radius: 4px;
+                                background: root.sensor-mark;
+                            }
+                            Text {
+                                text: root.sensor-text;
+                                color: #f5f7fb;
+                                font-size: 16px;
+                                font-weight: 600;
+                                overflow: elide;
+                                horizontal-stretch: 1;
+                            }
+                        }
+                    }
+                }
+
+                if root.tab == 1: Flickable {
+                    width: 100%;
+                    height: 100%;
+                    content-height: insights.preferred-height;
+                    insights := VerticalLayout {
+                        width: parent.width;
+                        spacing: 14px;
+                        padding-top: 4px;
+                        Text {
+                            text: "This window";
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: #f5f7fb;
+                        }
+                        Text {
+                            text: root.count-text + " \u00b7 " + root.unit-text;
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                        HorizontalLayout {
+                            spacing: 8px;
+                            StatTile { label: "Average"; value: root.avg-text; }
+                            StatTile { label: "Lowest"; value: root.min-text; }
+                            StatTile { label: "Highest"; value: root.max-text; }
+                        }
+                        Rectangle {
+                            border-radius: 16px;
+                            background: #1b202b;
+                            border-width: 1px;
+                            border-color: #2c3344;
+                            VerticalLayout {
+                                padding: 16px;
+                                spacing: 8px;
+                                Text {
+                                    text: "Time in range";
+                                    color: #8e97ab;
+                                    font-size: 13px;
+                                }
+                                Text {
+                                    text: root.in-text;
+                                    font-size: 40px;
+                                    font-weight: 700;
+                                    color: #3dce73;
+                                }
+                                Rectangle {
+                                    height: 14px;
+                                    border-radius: 7px;
+                                    background: #2a3142;
+                                    clip: true;
+                                    Rectangle {
+                                        x: 0px;
+                                        width: parent.width * (root.low-pct / 100);
+                                        height: 100%;
+                                        background: #de3d4c;
+                                    }
+                                    Rectangle {
+                                        x: parent.width * (root.low-pct / 100);
+                                        width: parent.width * (root.in-pct / 100);
+                                        height: 100%;
+                                        background: #1e8c42;
+                                    }
+                                    Rectangle {
+                                        x: parent.width * ((root.low-pct + root.in-pct) / 100);
+                                        width: parent.width * (root.high-pct / 100);
+                                        height: 100%;
+                                        background: #e0a322;
+                                    }
+                                }
+                                HorizontalLayout {
+                                    Text {
+                                        text: root.low-caption;
+                                        color: #ff8d98;
+                                        font-size: 13px;
+                                        horizontal-stretch: 1;
+                                    }
+                                    Text {
+                                        text: root.high-caption;
+                                        color: #f0c14a;
+                                        font-size: 13px;
+                                        horizontal-alignment: right;
+                                    }
+                                }
+                            }
+                        }
+                        Text {
+                            text: root.coverage-text;
+                            wrap: word-wrap;
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                        Text {
+                            text: "These numbers describe the readings LibreLinkUp already sent. They are not a lab report.";
+                            wrap: word-wrap;
+                            color: #6f788a;
+                            font-size: 12px;
+                        }
+                    }
+                }
+
+                if root.tab == 2: Flickable {
+                    width: 100%;
+                    height: 100%;
+                    content-height: alarms.preferred-height;
+                    alarms := VerticalLayout {
+                        width: parent.width;
+                        spacing: 12px;
+                        padding-top: 4px;
+                        Text {
+                            text: "Thresholds";
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: #f5f7fb;
+                        }
+                        Text {
+                            text: "Taken from the LibreLinkUp connection. Gluco does not change them.";
+                            width: 100%;
+                            wrap: word-wrap;
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                        ThresholdRow { label: "Low"; value: root.low-threshold; swatch: #de3d4c; }
+                        ThresholdRow { label: "In range"; value: root.low-threshold + " \u2013 " + root.high-threshold; swatch: #1e8c42; }
+                        ThresholdRow { label: "High"; value: root.high-threshold; swatch: #e0a322; }
+                        ThresholdRow { label: "Very low"; value: root.very-low-threshold; swatch: #b42338; }
+                        ThresholdRow { label: "Very high line"; value: root.urgent-threshold; swatch: #e0a322; }
+                        Rectangle { height: 6px; }
+                        CheckBox {
+                            text: "Notify when a reading leaves the range";
+                            checked: root.notify-on;
+                            toggled => { root.notify-changed(self.checked); }
+                        }
+                        Text {
+                            text: "A notice here can lag the sensor, and it is easy to miss. The alarms on the FreeStyle Libre app are the ones to trust. Gluco stays quiet the first time it sees a reading, then speaks up when the range changes.";
+                            width: 100%;
+                            wrap: word-wrap;
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                    }
+                }
+
+                if root.tab == 3: Flickable {
+                    width: 100%;
+                    height: 100%;
+                    content-height: profile.preferred-height;
+                    profile := VerticalLayout {
+                        width: parent.width;
+                        spacing: 12px;
+                        padding-top: 4px;
+                        Text {
+                            text: "Profile";
+                            font-size: 22px;
+                            font-weight: 700;
+                            color: #f5f7fb;
+                        }
+                        Text {
+                            text: root.sync-text;
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                        Text {
+                            text: root.host-label == "" ? "Region not chosen yet" : root.host-label;
+                            color: #d5dbe8;
+                            font-size: 14px;
+                        }
+
+                        if root.patient-count > 1: VerticalLayout {
+                            spacing: 6px;
+                            Text {
+                                text: "Person";
+                                color: #8e97ab;
+                                font-size: 13px;
+                            }
+                            ComboBox {
+                                model: root.patient-names;
+                                current-index: root.patient-index;
+                                selected => { root.patient-changed(self.current-index); }
+                            }
+                        }
+
+                        Text {
+                            text: "Sensor wear";
+                            color: #8e97ab;
+                            font-size: 13px;
+                        }
+                        Text {
+                            text: "Libre 3 Plus and Libre 2 Plus wear for 15 days. Older Libre 3 and Libre 2 sensors wear for 14. This only changes the countdown.";
+                            width: 100%;
+                            wrap: word-wrap;
+                            color: #8e97ab;
+                            font-size: 12px;
+                        }
+                        HorizontalLayout {
+                            spacing: 8px;
+                            Rectangle {
+                                horizontal-stretch: 1;
+                                height: 42px;
+                                border-radius: 12px;
+                                background: root.wear-days == 14 ? #1e8c42 : #2a3142;
+                                Text {
+                                    width: 100%;
+                                    height: 100%;
+                                    text: "14 days";
+                                    color: #ffffff;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                    font-weight: 600;
+                                }
+                                TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.wear-changed(14); }
+                                }
+                            }
+                            Rectangle {
+                                horizontal-stretch: 1;
+                                height: 42px;
+                                border-radius: 12px;
+                                background: root.wear-days == 15 ? #1e8c42 : #2a3142;
+                                Text {
+                                    width: 100%;
+                                    height: 100%;
+                                    text: "15 days";
+                                    color: #ffffff;
+                                    horizontal-alignment: center;
+                                    vertical-alignment: center;
+                                    font-weight: 600;
+                                }
+                                TouchArea {
+                                    mouse-cursor: pointer;
+                                    clicked => { root.wear-changed(15); }
+                                }
+                            }
+                        }
+
+                        CheckBox {
+                            text: "Keep this window above other windows";
+                            checked: root.pinned;
+                            toggled => { root.pin-changed(self.checked); }
+                        }
+
+                        ActionButton {
+                            label: root.busy ? "Syncing\u2026" : "Refresh now";
+                            enabled: !root.busy;
+                            clicked => { root.refresh(); }
+                        }
+                        ActionButton {
+                            label: root.preview ? "Leave sample" : "Sign out";
+                            fill: #3a2430;
+                            ink: #ffb4c0;
+                            clicked => { root.sign-out(); }
+                        }
+
+                        Text {
+                            text: root.config-path;
+                            wrap: word-wrap;
+                            color: #6f788a;
+                            font-size: 12px;
+                        }
+                        Text {
+                            text: "Not a medical device. Not affiliated with Abbott. If this window and the phone disagree, believe the phone.";
+                            wrap: word-wrap;
+                            color: #6f788a;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+
+            Rectangle { height: 1px; background: #232a38; }
+            nav-bar := Rectangle {
+                height: 68px;
+                NavButton {
+                    x: 0px;
+                    y: 0px;
+                    width: nav-bar.width / 4;
+                    height: 100%;
+                    label: "Home";
+                    icon: 0;
+                    selected: root.tab == 0;
+                    clicked => { root.tab = 0; }
+                }
+                NavButton {
+                    x: nav-bar.width / 4;
+                    y: 0px;
+                    width: nav-bar.width / 4;
+                    height: 100%;
+                    label: "Insights";
+                    icon: 1;
+                    selected: root.tab == 1;
+                    clicked => { root.tab = 1; }
+                }
+                NavButton {
+                    x: nav-bar.width / 2;
+                    y: 0px;
+                    width: nav-bar.width / 4;
+                    height: 100%;
+                    label: "Alarms";
+                    icon: 2;
+                    selected: root.tab == 2;
+                    clicked => { root.tab = 2; }
+                }
+                NavButton {
+                    x: nav-bar.width * 0.75;
+                    y: 0px;
+                    width: nav-bar.width / 4;
+                    height: 100%;
+                    label: "Profile";
+                    icon: 3;
+                    selected: root.tab == 3;
+                    clicked => { root.tab = 3; }
+                }
+            }
+        }
+    }
+}
